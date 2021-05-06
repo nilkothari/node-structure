@@ -9,7 +9,7 @@ import supertest from 'supertest';
 import app from '../../../../src/app';
 
 describe('Signup basic route', () => {
-  const endpoint = '/v1/signup/basic';
+  const endpoint = '/v1/access/signup';
   const request = supertest(app);
 
   const email = 'abc@xyz.com';

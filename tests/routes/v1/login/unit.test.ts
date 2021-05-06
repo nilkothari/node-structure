@@ -15,7 +15,7 @@ import supertest from 'supertest';
 import app from '../../../../src/app';
 
 describe('Login basic route', () => {
-  const endpoint = '/v1/login/basic';
+  const endpoint = '/v1/access/login';
   const request = supertest(app);
 
   beforeEach(() => {
