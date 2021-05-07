@@ -10,6 +10,10 @@ describe('apikey validation', () => {
     mockFindApiKey.mockClear();
   });
 
+  afterAll(async () => {
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500)); // avoid jest open handle error
+  });
+
   it('Should response with 400 if x-api-key header is not passed', async () => {
     const response = await request.get(endpoint).timeout(2000);
     expect(response.status).toBe(400);
