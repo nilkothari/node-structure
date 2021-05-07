@@ -27,7 +27,7 @@ export default asyncHandler(async (req: RoleRequest, res) => {
     } as User,
     accessTokenKey,
     refreshTokenKey,
-    RoleCode.LEARNER,
+    RoleCode.USER,
   );
 
   const tokens = await createTokens(createdUser, keystore.primaryKey, keystore.secondaryKey);

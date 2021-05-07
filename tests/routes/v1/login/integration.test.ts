@@ -34,7 +34,7 @@ describe('Login basic route', () => {
       updatedAt: new Date(),
       createdAt: new Date(),
       profilePicUrl: 'https:/abc.com/xyz',
-      roles: [{ _id: new Types.ObjectId(), code: RoleCode.LEARNER } as Role],
+      roles: [{ _id: new Types.ObjectId(), code: RoleCode.USER } as Role],
     } as User);
     apikey = await ApiKeyModel.findOne({ status: true });
   });
