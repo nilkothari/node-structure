@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import User from '../database/model/User';
 import Keystore from '../database/model/Keystore';
+import { Prisma, PrismaClient, User } from '@prisma/client';
 
 declare interface PublicRequest extends Request {
   apiKey: string;
@@ -11,9 +11,17 @@ declare interface RoleRequest extends PublicRequest {
 }
 
 declare interface ProtectedRequest extends RoleRequest {
-  user: User;
+  user: User | undefined;
   accessToken: string;
   keystore: Keystore;
+}
+
+declare interface PrismaRequest extends ProtectedRequest {
+  prisma: PrismaClient<
+    Prisma.PrismaClientOptions,
+    never,
+    Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
+  >;
 }
 
 declare interface Tokens {

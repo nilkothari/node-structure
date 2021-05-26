@@ -6,9 +6,10 @@ import User from '../database/model/User';
 import { tokenInfo } from '../config';
 
 export const getAccessToken = (authorization?: string) => {
-  if (!authorization) throw new AuthFailureError('Invalid Authorization');
-  if (!authorization.startsWith('Bearer ')) throw new AuthFailureError('Invalid Authorization');
-  return authorization.split(' ')[1];
+  if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.split(' ')[1];
+  }
+  return '';
 };
 
 export const validateTokenData = (payload: JwtPayload): boolean => {
