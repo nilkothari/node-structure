@@ -4,12 +4,11 @@ import { ProtectedRequest } from 'app-request';
 import { AuthFailureError, AccessTokenError, TokenExpiredError } from '../core/ApiError';
 import JWT from '../core/JWT';
 import KeystoreRepo from '../repository/KeystoreRepo';
-import { Types } from 'mongoose';
 import { getAccessToken, validateTokenData } from './authUtils';
 import validator, { ValidationSource } from '../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../helpers/asyncHandler';
-import prisma from '../../prisma';
+import prisma from '../database';
 
 export default async (req: ProtectedRequest, res: Response, next: NextFunction) => {
   req.accessToken = getAccessToken(req.headers.authorization);

@@ -1,5 +1,5 @@
 import { Permission, Role } from '@prisma/client';
-import prisma from '../../prisma';
+import prisma from '../database';
 
 export default {
   getAllRoles: (): Promise<Role[] | null> => {

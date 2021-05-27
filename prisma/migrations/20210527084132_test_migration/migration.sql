@@ -1,0 +1,1 @@
+INSERT INTO "Role"(id, name)	VALUES ('5d7d79a7-acd3-48f1-8b95-092e31006cd5', 'Test');

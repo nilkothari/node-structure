@@ -1,7 +1,7 @@
 import { InternalError } from '../core/ApiError';
 import KeystoreRepo from './KeystoreRepo';
 import { Profile, User } from '@prisma/client';
-import prisma from '../../prisma';
+import prisma from '../database';
 
 export default {
   // contains critical information of the user

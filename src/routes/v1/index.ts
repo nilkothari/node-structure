@@ -1,8 +1,9 @@
 import express from 'express';
-import access from './access';
 
 const router = express.Router();
 
-router.use('/access', access);
+/**
+ * * Example: router.use('/user', user);
+ **/
 
 export default router;

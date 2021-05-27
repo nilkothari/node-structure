@@ -2,7 +2,6 @@ import Joi from '@hapi/joi';
 import { Request, Response, NextFunction } from 'express';
 import Logger from '../core/Logger';
 import { BadRequestError } from '../core/ApiError';
-import { Types } from 'mongoose';
 
 export enum ValidationSource {
   BODY = 'body',
@@ -10,12 +9,6 @@ export enum ValidationSource {
   QUERY = 'query',
   PARAM = 'params',
 }
-
-export const JoiObjectId = () =>
-  Joi.string().custom((value: string, helpers) => {
-    if (!Types.ObjectId.isValid(value)) return helpers.error('any.invalid');
-    return value;
-  }, 'Object Id Validation');
 
 export const JoiUrlEndpoint = () =>
   Joi.string().custom((value: string, helpers) => {

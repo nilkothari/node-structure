@@ -1,0 +1,92 @@
+{
+  "vsicons.projectDetection.autoReload": true,
+  "explorer.openEditors.visible": 0,
+  "files.exclude": {
+      "dist": true,
+      "node_modules": true
+  },
+  "workbench.iconTheme": "vscode-icons",
+  "terminal.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe",
+  "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[prisma]": {
+      "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "azureFunctions.showCoreToolsWarning": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "terminal.integrated.tabs.enabled": true,
+  "terminal.integrated.defaultProfile.windows": "Command Prompt",
+  "prettier.endOfLine": "auto",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "mssql.connections": [
+      {
+          "server": "{{put-server-name-here}}",
+          "database": "{{put-database-name-here}}",
+          "user": "{{put-username-here}}",
+          "password": "{{put-password-here}}"
+      }
+  ],
+  "prettier.requireConfig": true,
+  "eslint.format.enable": true,
+  "files.associations": {
+      "*.prisma": "prisma"
+  },
+  "settingsSync.ignoredSettings": [
+      "files.autoSave"
+  ],
+  "better-comments.tags": [
+      {
+          "tag": "!",
+          "color": "#FF2D00",
+          "strikethrough": false,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+      },
+      {
+          "tag": "?",
+          "color": "#3498DB",
+          "strikethrough": false,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+      },
+      {
+          "tag": "//",
+          "color": "#474747",
+          "strikethrough": true,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+      },
+      {
+          "tag": "todo",
+          "color": "#FF8C00",
+          "strikethrough": false,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+      },
+      {
+          "tag": "*",
+          "color": "#98C379",
+          "strikethrough": false,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+      }
+  ]
+}

@@ -1,4 +1,3 @@
-import prisma from '../../../prisma';
 import RoleRepo from '../../repository/RoleRepo';
 
 export default {

@@ -1,5 +1,5 @@
 import { User, KeyStore } from '@prisma/client';
-import prisma from '../../prisma';
+import prisma from '../database';
 
 export default {
   findforKey: (client: User, key: string): Promise<KeyStore | null> => {
@@ -17,22 +17,22 @@ export default {
       },
     });
   },
-  find: (client: User, primaryKey: string, secondaryKey: string): Promise<KeyStore | null> => {
+  find: (userId: string, primaryKey: string, secondaryKey: string): Promise<KeyStore | null> => {
     return prisma.keyStore.findFirst({
       where: {
-        userId: client.id,
+        userId: userId,
         primaryKey: primaryKey,
         secondaryKey: secondaryKey,
       },
     });
   },
-  create: async (client: User, primaryKey: string, secondaryKey: string): Promise<KeyStore> => {
+  create: async (userId: string, primaryKey: string, secondaryKey: string): Promise<KeyStore> => {
     const keystore = await prisma.keyStore.create({
       data: {
         primaryKey: primaryKey,
         secondaryKey: secondaryKey,
         user: {
-          connect: { id: client.id },
+          connect: { id: userId },
         },
       },
     });

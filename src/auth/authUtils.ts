@@ -1,9 +1,8 @@
 import { Tokens } from 'app-request';
 import { AuthFailureError, InternalError } from '../core/ApiError';
 import JWT, { JwtPayload } from '../core/JWT';
-import { Types } from 'mongoose';
-import User from '../database/model/User';
 import { tokenInfo } from '../config';
+import { User } from '@prisma/client';
 
 export const getAccessToken = (authorization?: string) => {
   if (authorization && authorization.startsWith('Bearer ')) {
@@ -20,8 +19,7 @@ export const validateTokenData = (payload: JwtPayload): boolean => {
     !payload.aud ||
     !payload.prm ||
     payload.iss !== tokenInfo.issuer ||
-    payload.aud !== tokenInfo.audience ||
-    !Types.ObjectId.isValid(payload.sub)
+    payload.aud !== tokenInfo.audience
   )
     throw new AuthFailureError('Invalid Access Token');
   return true;
@@ -36,7 +34,7 @@ export const createTokens = async (
     new JwtPayload(
       tokenInfo.issuer,
       tokenInfo.audience,
-      user._id.toString(),
+      user.id,
       accessTokenKey,
       tokenInfo.accessTokenValidityDays,
     ),
@@ -48,7 +46,7 @@ export const createTokens = async (
     new JwtPayload(
       tokenInfo.issuer,
       tokenInfo.audience,
-      user._id.toString(),
+      user.id,
       refreshTokenKey,
       tokenInfo.refreshTokenValidityDays,
     ),
