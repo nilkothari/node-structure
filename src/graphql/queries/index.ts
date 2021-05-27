@@ -1,4 +1,4 @@
-import roleResolvers from './role';
+import roleResolvers from './role.query';
 
 export default {
   ...roleResolvers,

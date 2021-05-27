@@ -1,4 +1,5 @@
 import { makeExecutableSchema } from 'apollo-server-express';
+import IsAuthenticatedDirective from './directives/isAuthenticated.directive';
 
 import queries from './queries';
 
@@ -10,4 +11,7 @@ const resolvers = {
 export const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
+  schemaDirectives: {
+    isAuthenticated: IsAuthenticatedDirective,
+  },
 });
