@@ -1,18 +1,15 @@
-import { PrismaRequest } from 'app-request';
+import prisma from '../../../prisma';
+import RoleRepo from '../../repository/RoleRepo';
 
 export default {
   Query: {
-    getRoles: async (parent: any, args: any, context: any, info: any) => {
-      return context.req.prisma.role.findMany();
+    getRoles: () => {
+      return RoleRepo.getAllRoles();
     },
   },
   Role: {
-    permissions: (parent: { id: any }, _args: any, context: any) => {
-      return context.req.prisma.role
-        .findUnique({
-          where: { id: parent?.id },
-        })
-        .permissions();
+    permissions: (parent: { id: any }) => {
+      return RoleRepo.getPermissionsByRoleId(parent.id);
     },
   },
 };

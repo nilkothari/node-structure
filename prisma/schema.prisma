@@ -11,14 +11,24 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String?
-  email     String   @unique
+  email     String     @unique
   password  String
   profileId String
-  profile   Profile  @relation(fields: [profileId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  profile   Profile    @relation(fields: [profileId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  KeyStore  KeyStore[]
+}
+
+model KeyStore {
+  id           Int      @id @default(autoincrement())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  primaryKey   String
+  secondaryKey String
+  createdAt    DateTime @default(now())
 }
 
 model Profile {

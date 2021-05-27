@@ -1,16 +1,13 @@
 import express, { Request, Response, NextFunction } from 'express';
 import Logger from './core/Logger';
 import helmet from 'helmet';
-import prismaMiddleware from './helpers/prisma';
 import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import { corsUrl, environment } from './config';
-// import './database'; // initialize database
 import { NotFoundError, ApiError, InternalError } from './core/ApiError';
 import routesV1 from './routes/v1';
 import { schema } from './graphql';
 import authentication from './auth/authentication';
-import { PrismaClient } from '@prisma/client';
 
 process.on('uncaughtException', (e) => {
   Logger.error(e);
@@ -30,9 +27,6 @@ app.use(cors({ origin: corsUrl, optionsSuccessStatus: 200 }));
 //     ieNoOpen: false,
 //   }),
 // );
-
-// Append prisma to request
-app.use('/', prismaMiddleware);
 
 // Authenticate Request
 app.use('/', authentication);
@@ -58,6 +52,7 @@ const graphQLServer = new ApolloServer({
   },
 });
 
+// Applied graphQL server as express middleware
 graphQLServer.applyMiddleware({ app });
 
 // catch 404 and forward to error handler

@@ -1,23 +1,23 @@
 import { NextFunction, Response } from 'express';
-import { PrismaRequest } from 'app-request';
-import UserRepo from '../database/repository/UserRepo';
+import UserRepo from '../repository/UserRepo';
+import { ProtectedRequest } from 'app-request';
 import { AuthFailureError, AccessTokenError, TokenExpiredError } from '../core/ApiError';
 import JWT from '../core/JWT';
-import KeystoreRepo from '../database/repository/KeystoreRepo';
+import KeystoreRepo from '../repository/KeystoreRepo';
 import { Types } from 'mongoose';
 import { getAccessToken, validateTokenData } from './authUtils';
 import validator, { ValidationSource } from '../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../helpers/asyncHandler';
-import { prisma } from '.prisma/client';
+import prisma from '../../prisma';
 
-export default async (req: PrismaRequest, res: Response, next: NextFunction) => {
+export default async (req: ProtectedRequest, res: Response, next: NextFunction) => {
   req.accessToken = getAccessToken(req.headers.authorization);
   if (req.accessToken) {
     try {
       const payload = await JWT.validate(req.accessToken);
       validateTokenData(payload);
-      const user = await req.prisma.user.findFirst({
+      const user = await prisma.user.findFirst({
         where: {
           id: payload.sub,
         },

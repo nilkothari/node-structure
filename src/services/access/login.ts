@@ -1,8 +1,8 @@
 import { SuccessResponse } from '../../core/ApiResponse';
 import crypto from 'crypto';
-import UserRepo from '../../database/repository/UserRepo';
+import UserRepo from '../../repository/UserRepo';
 import { BadRequestError, AuthFailureError } from '../../core/ApiError';
-import KeystoreRepo from '../../database/repository/KeystoreRepo';
+import KeystoreRepo from '../../repository/KeystoreRepo';
 import { createTokens } from '../../auth/authUtils';
 import asyncHandler from '../../helpers/asyncHandler';
 import bcrypt from 'bcrypt';

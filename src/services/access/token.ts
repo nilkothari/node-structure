@@ -1,10 +1,10 @@
 import { TokenRefreshResponse } from '../../core/ApiResponse';
 import { ProtectedRequest } from 'app-request';
 import { Types } from 'mongoose';
-import UserRepo from '../../database/repository/UserRepo';
+import UserRepo from '../../repository/UserRepo';
 import { AuthFailureError } from '../../core/ApiError';
 import JWT from '../../core/JWT';
-import KeystoreRepo from '../../database/repository/KeystoreRepo';
+import KeystoreRepo from '../../repository/KeystoreRepo';
 import crypto from 'crypto';
 import { validateTokenData, createTokens, getAccessToken } from '../../auth/authUtils';
 import asyncHandler from '../../helpers/asyncHandler';

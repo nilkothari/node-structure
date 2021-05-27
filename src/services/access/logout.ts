@@ -1,4 +1,4 @@
-import KeystoreRepo from '../../database/repository/KeystoreRepo';
+import KeystoreRepo from '../../repository/KeystoreRepo';
 import { ProtectedRequest } from 'app-request';
 import { SuccessMsgResponse } from '../../core/ApiResponse';
 import asyncHandler from '../../helpers/asyncHandler';
