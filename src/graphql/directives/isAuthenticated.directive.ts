@@ -1,5 +1,6 @@
 import { SchemaDirectiveVisitor } from 'apollo-server-express';
 import { defaultFieldResolver } from 'graphql';
+import { AuthFailureError, BadRequestError } from '../../core/ApiError';
 
 class IsAuthenticatedDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field: any) {
@@ -7,14 +8,17 @@ class IsAuthenticatedDirective extends SchemaDirectiveVisitor {
 
     field.resolve = async function (...args: any) {
       // extract user from context
-      const { user } = args[2];
-
-      if (!user) {
-        throw new Error('You are not authenticated!');
+      const { payload, keystore, accessToken } = args[2].req;
+      if (!accessToken) {
+        throw new BadRequestError('No token provided');
       }
 
-      if (!user.is_admin) {
-        throw new Error('This is above your pay grade!');
+      if (!keystore) {
+        throw new Error("You don't have active session, please login again!");
+      }
+
+      if (!payload) {
+        throw new AuthFailureError('Invalid access token');
       }
 
       return resolve.apply(this, args);

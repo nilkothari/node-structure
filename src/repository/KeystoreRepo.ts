@@ -1,11 +1,11 @@
-import { User, KeyStore } from '@prisma/client';
+import { KeyStore } from '@prisma/client';
 import prisma from '../database';
 
 export default {
-  findforKey: (client: User, key: string): Promise<KeyStore | null> => {
+  findforKey: (userId: string, key: string): Promise<KeyStore | null> => {
     return prisma.keyStore.findFirst({
       where: {
-        userId: client.id,
+        userId: userId,
         primaryKey: key,
       },
     });

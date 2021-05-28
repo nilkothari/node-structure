@@ -61,17 +61,17 @@ export default class JWT {
 }
 
 export class JwtPayload {
-  aud: string;
-  sub: string;
-  iss: string;
-  iat: number;
-  exp: number;
+  uid: string;
+  rid: string;
+  perm: string;
   prm: string;
+  exp: number;
+  iat: number;
 
-  constructor(issuer: string, audience: string, subject: string, param: string, validity: number) {
-    this.iss = issuer;
-    this.aud = audience;
-    this.sub = subject;
+  constructor(userId: string, roleId: string, permission: string, param: string, validity: number) {
+    this.uid = userId;
+    this.rid = roleId;
+    this.perm = permission;
     this.iat = Math.floor(Date.now() / 1000);
     this.exp = this.iat + validity * 24 * 60 * 60;
     this.prm = param;

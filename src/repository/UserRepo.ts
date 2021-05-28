@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import { Profile, Role, User } from '@prisma/client';
-import { AuthFailureError, BadRequestError, InternalError } from '../core/ApiError';
+import { AuthFailureError, BadRequestError } from '../core/ApiError';
 import KeystoreRepo from './KeystoreRepo';
 import prisma from '../database';
 import { AuthResponse, SignupInput } from '../graphql/interface';
@@ -71,8 +71,6 @@ const UserRepo = {
 
   signUp: async (signupInput: SignupInput): Promise<User> => {
     if (UserRepo.checkEmailAvailability(signupInput.email)) {
-      const accessTokenKey = crypto.randomBytes(64).toString('hex');
-      const refreshTokenKey = crypto.randomBytes(64).toString('hex');
       const passwordHash = await bcrypt.hash(signupInput.password, 10);
 
       const user = await prisma.user.create({
@@ -97,7 +95,34 @@ const UserRepo = {
   },
 
   login: async (email: string, password: string): Promise<AuthResponse> => {
-    const user = await UserRepo.findByEmail(email);
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email,
+        isActive: true,
+        isDeleted: false,
+      },
+      select: {
+        id: true,
+        password: true,
+        email: true,
+        profile: {
+          select: {
+            id: true,
+            role: {
+              select: {
+                id: true,
+                name: true,
+                permissions: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
     if (!user) {
       throw new BadRequestError('User not registered');
     }

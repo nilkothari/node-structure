@@ -1,5 +1,6 @@
 import { Request } from 'express';
-import { User, KeyStore } from '@prisma/client';
+import { KeyStore } from '@prisma/client';
+import { JwtPayload } from '../core/JWT';
 
 declare interface PublicRequest extends Request {
   apiKey: string;
@@ -10,7 +11,7 @@ declare interface RoleRequest extends PublicRequest {
 }
 
 declare interface ProtectedRequest extends RoleRequest {
-  user: User | undefined;
+  payload: JwtPayload;
   accessToken: string;
   keystore: KeyStore;
 }

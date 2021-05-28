@@ -2,7 +2,7 @@ import { Tokens } from 'app-request';
 import { AuthFailureError, InternalError } from '../core/ApiError';
 import JWT, { JwtPayload } from '../core/JWT';
 import { tokenInfo } from '../config';
-import { User } from '@prisma/client';
+import { isUUID } from '../helpers/utilities';
 
 export const getAccessToken = (authorization?: string) => {
   if (authorization && authorization.startsWith('Bearer ')) {
@@ -14,27 +14,28 @@ export const getAccessToken = (authorization?: string) => {
 export const validateTokenData = (payload: JwtPayload): boolean => {
   if (
     !payload ||
-    !payload.iss ||
-    !payload.sub ||
-    !payload.aud ||
+    !payload.uid ||
+    !payload.rid ||
+    !payload.perm ||
     !payload.prm ||
-    payload.iss !== tokenInfo.issuer ||
-    payload.aud !== tokenInfo.audience
+    !isUUID(payload.uid) ||
+    !isUUID(payload.rid)
   )
     throw new AuthFailureError('Invalid Access Token');
   return true;
 };
 
 export const createTokens = async (
-  user: User,
+  user: any,
   accessTokenKey: string,
   refreshTokenKey: string,
 ): Promise<Tokens> => {
+  const permissions = user.profile.role.permissions.map((param: any) => param.name);
   const accessToken = await JWT.encode(
     new JwtPayload(
-      tokenInfo.issuer,
-      tokenInfo.audience,
       user.id,
+      user.profile.role.id,
+      `${permissions.join('|')}`,
       accessTokenKey,
       tokenInfo.accessTokenValidityDays,
     ),
@@ -44,9 +45,9 @@ export const createTokens = async (
 
   const refreshToken = await JWT.encode(
     new JwtPayload(
-      tokenInfo.issuer,
-      tokenInfo.audience,
       user.id,
+      user.profile.role.id,
+      'Refresh-Token',
       refreshTokenKey,
       tokenInfo.refreshTokenValidityDays,
     ),

@@ -27,7 +27,7 @@ export default gql`
   }
 
   extend type Query {
-    getUsers: [User!]!
+    getUsers: [User!]! @isAuthenticated
     getUserByEmail(email: String!): User!
     getUserById(id: String!): User!
   }
