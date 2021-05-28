@@ -1,14 +1,24 @@
 import { InternalError } from '../core/ApiError';
 import KeystoreRepo from './KeystoreRepo';
-import { Profile, User } from '@prisma/client';
+import { Profile, Role, User } from '@prisma/client';
 import prisma from '../database';
 
 export default {
-  // contains critical information of the user
+  findAll: (): Promise<User[] | null> => {
+    return prisma.user.findMany({
+      where: {
+        isDeleted: false,
+        isActive: true,
+      },
+    });
+  },
+
   findById: (id: string): Promise<User | null> => {
     return prisma.user.findFirst({
       where: {
         id: id,
+        isDeleted: false,
+        isActive: true,
       },
     });
   },
@@ -31,14 +41,14 @@ export default {
     });
   },
 
-  findByEmailWithProfile: (email: string): Promise<Profile | null> => {
-    return prisma.user
+  findRoleForProfile: (id: string): Promise<Role | null> => {
+    return prisma.profile
       .findUnique({
         where: {
-          email: email,
+          id: id,
         },
       })
-      .profile();
+      .role();
   },
 
   // create: async (

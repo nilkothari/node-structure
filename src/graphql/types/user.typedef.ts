@@ -5,6 +5,7 @@ export default gql`
     id: ID!
     name: String
     email: String!
+    profile: Profile!
   }
 
   type Profile {
@@ -18,6 +19,12 @@ export default gql`
     refreshToken: String!
   }
 
+  input SignupRequest {
+    email: String!
+    password: String!
+    roleId: String!
+  }
+
   extend type Query {
     getUsers: [User!]!
     getUserByEmail(email: String!): User!
@@ -25,9 +32,7 @@ export default gql`
   }
 
   extend type Mutation {
-    signUp(): AuthResponse!
+    signUp(signupRequest: SignupRequest): User!
     login(email: String!, password: String!): AuthResponse!
   }
-
-  scalar DateTime
 `;

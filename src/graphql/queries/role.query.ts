@@ -12,11 +12,3 @@ export default {
     },
   },
 };
-
-// const roleQueries = {
-
-// };
-
-// export const roleFields = {};
-
-// export default roleQueries;

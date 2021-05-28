@@ -11,15 +11,19 @@ generator client {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  name      String?
-  email     String     @unique
-  password  String
-  profileId String
-  profile   Profile    @relation(fields: [profileId], references: [id])
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  KeyStore  KeyStore[]
+  id                   String     @id @default(uuid())
+  name                 String?
+  email                String     @unique
+  password             String
+  profileId            String
+  profile              Profile    @relation(fields: [profileId], references: [id])
+  KeyStore             KeyStore[]
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  isActive             Boolean    @default(true)
+  isDeleted            Boolean    @default(false)
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
 }
 
 model KeyStore {
@@ -28,6 +32,7 @@ model KeyStore {
   user         User     @relation(fields: [userId], references: [id])
   primaryKey   String
   secondaryKey String
+  isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
 }
 
@@ -44,12 +49,15 @@ model Role {
   id          String       @id @default(uuid())
   name        String       @unique
   permissions Permission[]
-  createdAt   DateTime     @default(now())
   userProfile Profile?
+  isDeleted   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
 }
 
 model Permission {
-  id    String @id @default(uuid())
-  name  String @unique
-  roles Role[]
+  id        String   @id @default(uuid())
+  name      String   @unique
+  roles     Role[]
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
