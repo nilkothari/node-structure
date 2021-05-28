@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-express';
 export default gql`
   type User {
     id: ID!
-    name: String
+    name: String!
     email: String!
     profile: Profile!
   }
@@ -19,7 +19,8 @@ export default gql`
     refreshToken: String!
   }
 
-  input SignupRequest {
+  input SignupInput {
+    name: String!
     email: String!
     password: String!
     roleId: String!
@@ -32,7 +33,8 @@ export default gql`
   }
 
   extend type Mutation {
-    signUp(signupRequest: SignupRequest): User!
+    checkEmailAvailability(email: String!): Boolean!
+    signUp(signupInput: SignupInput): User!
     login(email: String!, password: String!): AuthResponse!
   }
 `;

@@ -1,5 +1,5 @@
-// import userResolvers from './user.mutation';
+import userMutations from './user.mutation';
 
-// export default {
-//   ...userResolvers,
-// };
+export default {
+  ...userMutations,
+};

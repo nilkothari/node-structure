@@ -1,14 +1,14 @@
 import UserRepo from '../../repository/UserRepo';
 
-const userQueries = {
+export default {
   Query: {
-    getUsers: async () => {
+    getUsers: () => {
       return UserRepo.findAll();
     },
-    getUserByEmail: async (_parent: any, args: any) => {
+    getUserByEmail: (_parent: any, args: any) => {
       return UserRepo.findById(args.id);
     },
-    getUserById: async (_parent: any, args: { id: string }) => {
+    getUserById: (_parent: any, args: { id: string }) => {
       return UserRepo.findById(args.id);
     },
   },
@@ -23,5 +23,3 @@ const userQueries = {
     },
   },
 };
-
-export default userQueries;

@@ -1,9 +1,13 @@
-import { InternalError } from '../core/ApiError';
-import KeystoreRepo from './KeystoreRepo';
+import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 import { Profile, Role, User } from '@prisma/client';
+import { AuthFailureError, BadRequestError, InternalError } from '../core/ApiError';
+import KeystoreRepo from './KeystoreRepo';
 import prisma from '../database';
+import { AuthResponse, SignupInput } from '../graphql/interface';
+import { createTokens } from '../auth/authUtils';
 
-export default {
+const UserRepo = {
   findAll: (): Promise<User[] | null> => {
     return prisma.user.findMany({
       where: {
@@ -51,24 +55,72 @@ export default {
       .role();
   },
 
-  // create: async (
-  //   user: User,
-  //   accessTokenKey: string,
-  //   refreshTokenKey: string,
-  //   roleCode: string,
-  // ): Promise<{ user: User; keystore: Keystore }> => {
-  //   const now = new Date();
+  checkEmailAvailability: async (email: string): Promise<boolean> => {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email,
+        isActive: true,
+        isDeleted: false,
+      },
+    });
+    if (user) {
+      return false;
+    }
+    return true;
+  },
 
-  //   const role = await RoleModel.findOne({ code: roleCode })
-  //     .select('+email +password')
-  //     .lean<Role>()
-  //     .exec();
-  //   if (!role) throw new InternalError('Role must be defined');
+  signUp: async (signupInput: SignupInput): Promise<User> => {
+    if (UserRepo.checkEmailAvailability(signupInput.email)) {
+      const accessTokenKey = crypto.randomBytes(64).toString('hex');
+      const refreshTokenKey = crypto.randomBytes(64).toString('hex');
+      const passwordHash = await bcrypt.hash(signupInput.password, 10);
 
-  //   user.roles = [role._id];
-  //   user.createdAt = user.updatedAt = now;
-  //   const createdUser = await UserModel.create(user);
-  //   const keystore = await KeystoreRepo.create(createdUser._id, accessTokenKey, refreshTokenKey);
-  //   return { user: createdUser.toObject(), keystore: keystore };
-  // },
+      const user = await prisma.user.create({
+        data: {
+          email: signupInput.email,
+          password: passwordHash,
+          name: signupInput.name,
+          profile: {
+            create: {
+              role: {
+                connect: {
+                  id: signupInput.roleId,
+                },
+              },
+            },
+          },
+        },
+      });
+      return user;
+    }
+    throw new BadRequestError('User already registered');
+  },
+
+  login: async (email: string, password: string): Promise<AuthResponse> => {
+    const user = await UserRepo.findByEmail(email);
+    if (!user) {
+      throw new BadRequestError('User not registered');
+    }
+    if (!user.password) {
+      throw new BadRequestError('Password not set');
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      throw new AuthFailureError('Authentication failure');
+    }
+    const accessTokenKey = crypto.randomBytes(64).toString('hex');
+    const refreshTokenKey = crypto.randomBytes(64).toString('hex');
+
+    await KeystoreRepo.create(user.id, accessTokenKey, refreshTokenKey);
+    const token = await createTokens(user, accessTokenKey, refreshTokenKey);
+    const response: AuthResponse = {
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+      userId: user.id,
+    };
+    return response;
+  },
 };
+
+export default UserRepo;

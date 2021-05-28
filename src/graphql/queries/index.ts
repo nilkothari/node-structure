@@ -1,7 +1,7 @@
-import roleResolvers from './role.query';
-import userResolvers from './user.query';
+import roleQueries from './role.query';
+import userQueries from './user.query';
 
 export default {
-  ...roleResolvers,
-  ...userResolvers,
+  ...roleQueries,
+  ...userQueries,
 };

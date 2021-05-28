@@ -26,8 +26,8 @@ export default {
       },
     });
   },
-  create: async (userId: string, primaryKey: string, secondaryKey: string): Promise<KeyStore> => {
-    const keystore = await prisma.keyStore.create({
+  create: (userId: string, primaryKey: string, secondaryKey: string): Promise<KeyStore> => {
+    const keystore = prisma.keyStore.create({
       data: {
         primaryKey: primaryKey,
         secondaryKey: secondaryKey,
